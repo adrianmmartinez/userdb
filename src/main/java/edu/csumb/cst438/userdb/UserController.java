@@ -10,19 +10,15 @@ public class UserController {
     @Autowired
     IUserRepository userRepo;
 
-    /**
-     * @route /available/{id}
-     * @param String item id
-     * @return user balance
-     */
+    @CrossOrigin()
     @GetMapping("/balance/{id}")
     public int getBalance(@PathVariable String id) {
-        System.out.println("inside balance");
         User user = userRepo.findByRepoId(id);
         int amount = user.getBalance();
         return amount;
     }
 
+    @CrossOrigin()
     @GetMapping("/verify/funds/{id}/{amount}")
     public boolean verifyFunds(@PathVariable String id, @PathVariable int amount) {
         User user = userRepo.findByRepoId(id);
@@ -30,9 +26,9 @@ public class UserController {
         return funds >= amount;
     }
 
+    @CrossOrigin()
     @PostMapping("/login")
     public String signIn(@RequestParam(value = "username") String username) {
-        System.out.println(username);
         User user = userRepo.findByUsername(username);
         String id = user.getId();
         if (user == null) {
@@ -41,6 +37,7 @@ public class UserController {
         return id;
     }
 
+    @CrossOrigin()
     @PostMapping("/purchase")
     public boolean purchase (@RequestParam(value = "id") String id, @RequestParam(value = "amount") int amount) {
         User user = userRepo.findByRepoId(id);
@@ -49,9 +46,6 @@ public class UserController {
             return false;
         }
         boolean purchased = user.purchase(amount);
-        System.out.print(user.getBalance());
-        System.out.println("purchased = " + purchased);
-        System.out.print(user.getBalance());
         userRepo.save(user);
         return purchased;
     }
