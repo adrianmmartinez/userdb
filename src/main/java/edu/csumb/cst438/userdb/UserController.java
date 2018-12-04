@@ -2,6 +2,7 @@ package edu.csumb.cst438.userdb;
 
 import edu.csumb.cst438.userdb.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ public class UserController {
     @Autowired
     IUserRepository userRepo;
 
+    @CrossOrigin
     @PostMapping("/login")
     public boolean signIn(@RequestParam(value = "username") String username) {
         System.out.println(username);
@@ -24,6 +26,7 @@ public class UserController {
         return true;
     }
 
+    @CrossOrigin
     @PostMapping("/purchase")
     public boolean purchase (@RequestParam String id, @RequestParam int amount) {
         User user = userRepo.findByRepoId(id);
