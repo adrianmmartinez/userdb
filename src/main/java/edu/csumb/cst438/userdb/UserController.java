@@ -2,14 +2,11 @@ package edu.csumb.cst438.userdb;
 
 import edu.csumb.cst438.userdb.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-=======
 import org.springframework.web.bind.annotation.*;
->>>>>>> 5cc4ddaca1dfc7936089140ab85bd1f387ed5df7
 
 @RestController
 public class UserController {
