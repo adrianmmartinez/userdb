@@ -2,9 +2,7 @@ package edu.csumb.cst438.userdb;
 
 import edu.csumb.cst438.userdb.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -12,29 +10,42 @@ public class UserController {
     @Autowired
     IUserRepository userRepo;
 
-    @PostMapping("/login")
-    public boolean signIn(@RequestParam(value = "username") String username) {
-        System.out.println(username);
-        User user = userRepo.findByUsername(username);
-        System.out.println(user.getId());
-        System.out.println(userRepo.findAll());
-        if (user == null) {
-            return false;
-        }
-        return true;
+    @CrossOrigin()
+    @GetMapping("/balance/{id}")
+    public int getBalance(@PathVariable String id) {
+        User user = userRepo.findByRepoId(id);
+        int amount = user.getBalance();
+        return amount;
     }
 
+    @CrossOrigin()
+    @GetMapping("/verify/funds/{id}/{amount}")
+    public boolean verifyFunds(@PathVariable String id, @PathVariable int amount) {
+        User user = userRepo.findByRepoId(id);
+        int funds = user.getBalance();
+        return funds >= amount;
+    }
+
+    @CrossOrigin()
+    @PostMapping("/login")
+    public String signIn(@RequestParam(value = "username") String username) {
+        User user = userRepo.findByUsername(username);
+        String id = user.getId();
+        if (user == null) {
+            return null;
+        }
+        return id;
+    }
+
+    @CrossOrigin()
     @PostMapping("/purchase")
-    public boolean purchase (@RequestParam String id, @RequestParam int amount) {
+    public boolean purchase (@RequestParam(value = "id") String id, @RequestParam(value = "amount") int amount) {
         User user = userRepo.findByRepoId(id);
         if(user == null) {
             System.out.println("error: cant find item with id = " + id);
             return false;
         }
         boolean purchased = user.purchase(amount);
-        System.out.print(user.getBalance());
-        System.out.println("purchased = " + purchased);
-        System.out.print(user.getBalance());
         userRepo.save(user);
         return purchased;
     }
